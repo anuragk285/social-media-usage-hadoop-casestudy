@@ -1,0 +1,7 @@
+Australia	3.622	477
+Brazil	3.516	1010
+Canada	3.592	1010
+Germany	3.514	988
+India	3.520	3520
+UK	3.514	988
+USA	3.472	2007
