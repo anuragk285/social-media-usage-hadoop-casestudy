@@ -1,5 +1,3 @@
-Job 3: Most Popular Platform per Country
-
 Country	Most Popular Platform	User Count
 Australia	Instagram	151
 Brazil	Instagram	309
