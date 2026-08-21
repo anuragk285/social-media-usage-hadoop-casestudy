@@ -67,7 +67,6 @@ try:
     plt.tight_layout()
     plt.savefig("charts/job4_addiction_chart.png", dpi=300)
     plt.close()
-    print("✅ Job 4 chart saved.")
 except FileNotFoundError:
     print("Job 4 data not found")
 
