@@ -1,0 +1,15 @@
+Instagram|High	495
+Instagram|Low	722
+Instagram|Medium	1855
+Snapchat|High	139
+Snapchat|Low	273
+Snapchat|Medium	559
+TikTok|High	381
+TikTok|Low	613
+TikTok|Medium	1441
+Twitter|High	152
+Twitter|Low	255
+Twitter|Medium	566
+YouTube|High	399
+YouTube|Low	618
+YouTube|Medium	1532
