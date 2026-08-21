@@ -1,36 +1,34 @@
-#!/usr/bin/env python3
-
 import sys
 import csv
 
-def main():
-    reader = csv.reader(sys.stdin)
+for line in sys.stdin:
+    line = line.strip()
 
-    for row in reader:
+    if not line:
+        continue
 
-        # Skip empty rows
-        if not row:
-            continue
+    try:
+        row = next(csv.reader([line]))
 
         # Skip header
         if row[0].strip().lower() == "age":
             continue
 
-        # Make sure the row has enough columns
-        if len(row) < 5:
-            continue
+        # Dataset columns:
+        # 0 = age
+        # 1 = gender
+        # 2 = country
+        # 3 = daily_usage_hours
+        # 4 = primary_platform
 
         country = row[2].strip()
+        daily_usage_hours = float(row[3].strip())
         platform = row[4].strip()
 
-        # Ignore records with missing country/platform
         if not country or not platform:
             continue
 
-        # Mapper output:
-        # country <TAB> platform
-        print(f"{country}\t{platform}")
+        print(f"{country}\t{platform}\t{daily_usage_hours}")
 
-
-if __name__ == "__main__":
-    main()
+    except (ValueError, IndexError):
+        continue

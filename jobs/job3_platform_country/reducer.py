@@ -1,73 +1,83 @@
-#!/usr/bin/env python3
-
 import sys
 from collections import defaultdict
 
+current_country = None
+platform_data = defaultdict(lambda: [0, 0.0])
 
-def emit_result(country, platform_counts):
-    if not country or not platform_counts:
+
+def process_country(country, data):
+    if not country or not data:
         return
 
-    # Find the highest number of users
-    max_count = max(platform_counts.values())
+    # Find maximum user count
+    max_count = max(values[0] for values in data.values())
 
-    # Find all platforms having the highest count
-    winners = [
+    # Platforms tied for maximum count
+    candidates = [
         platform
-        for platform, count in platform_counts.items()
-        if count == max_count
+        for platform, values in data.items()
+        if values[0] == max_count
     ]
 
-    # If there is a tie, choose alphabetically first
-    winner = min(winners)
+    # If there is a tie, choose the platform
+    # with the highest average daily usage hours.
+    if len(candidates) > 1:
 
-    # Output:
-    # Country    Most_Popular_Platform    User_Count
-    print(f"{country}\t{winner}\t{max_count}")
+        winner = max(
+            candidates,
+            key=lambda platform: (
+                data[platform][1] / data[platform][0],
+                platform
+            )
+        )
 
+    else:
+        winner = candidates[0]
 
-def main():
+    count = data[winner][0]
 
-    current_country = None
-    platform_counts = defaultdict(int)
-
-    for line in sys.stdin:
-
-        line = line.strip()
-
-        if not line:
-            continue
-
-        # Mapper output format:
-        # country<TAB>platform
-        parts = line.split("\t", 1)
-
-        if len(parts) != 2:
-            continue
-
-        country = parts[0].strip()
-        platform = parts[1].strip()
-
-        if not country or not platform:
-            continue
-
-        # When we reach a new country,
-        # finish processing the previous country.
-        if current_country is not None and country != current_country:
-
-            emit_result(current_country, platform_counts)
-
-            platform_counts.clear()
-
-        current_country = country
-
-        # Count this platform for the current country
-        platform_counts[platform] += 1
-
-    # Process the last country
-    if current_country is not None:
-        emit_result(current_country, platform_counts)
+    # Average usage is used only for tie-breaking.
+    # It is not included in the final output.
+    print(f"{country:<15}{winner:<25}{count:>10}")
 
 
-if __name__ == "__main__":
-    main()
+for line in sys.stdin:
+
+    line = line.strip()
+
+    if not line:
+        continue
+
+    parts = line.split("\t")
+
+    if len(parts) != 3:
+        continue
+
+    country = parts[0].strip()
+    platform = parts[1].strip()
+
+    try:
+        daily_usage_hours = float(parts[2].strip())
+    except ValueError:
+        continue
+
+    if not country or not platform:
+        continue
+
+    # Country changed → process previous country
+    if current_country is not None and country != current_country:
+        process_country(current_country, platform_data)
+        platform_data.clear()
+
+    current_country = country
+
+    # Count users
+    platform_data[platform][0] += 1
+
+    # Add daily usage hours
+    platform_data[platform][1] += daily_usage_hours
+
+
+# Process final country
+if current_country is not None:
+    process_country(current_country, platform_data)
