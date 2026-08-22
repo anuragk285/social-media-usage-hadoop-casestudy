@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import sys, csv
 
 for line in sys.stdin:

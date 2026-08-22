@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import sys, csv
 
 def age_group(age):
