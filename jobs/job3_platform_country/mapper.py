@@ -10,16 +10,8 @@ for line in sys.stdin:
     try:
         row = next(csv.reader([line]))
 
-        # Skip header
         if row[0].strip().lower() == "age":
             continue
-
-        # Dataset columns:
-        # 0 = age
-        # 1 = gender
-        # 2 = country
-        # 3 = daily_usage_hours
-        # 4 = primary_platform
 
         country = row[2].strip()
         daily_usage_hours = float(row[3].strip())
